@@ -22,8 +22,8 @@ class Object {
     y = new ArrayList<SoftFloat>();
     current_radius_position = new IntList();
     
-    base_x = int(random(width / 2)); 
-    base_y = int(random(height / 2));
+    base_x = int(random(-width)); 
+    base_y = int(random(-height));
 
     for (int i = 0; i < 5; i++) {
       int current_position = i * multiplication_index;
@@ -65,9 +65,13 @@ class Object {
         current_radius_position.set(ii, 0);
       }
     }
+    base_x++;
+    base_y++;
   }
 
   void draw() {
+    stroke(0, 0, 100, 50);
+    line(x.get(0).get(), y.get(0).get(), x.get(x.size()-1).get(), y.get(y.size()-1).get());
     for (int i =0; i < x.size(); i++) {
       for (int ii =0; ii < x.size(); ii++) {
         this_x = x.get(i).get();
@@ -97,7 +101,7 @@ class Object {
         //fill(i * 10, 100, 100, 10);
         // Drawing triangle get the FrameRate from 45 to 5. That Sucks.
         //triangle(prev_x, prev_y, this_x, this_y, next_x, next_y); 
-        stroke(0, 0, 100, 50);
+        
         //noFill();
         line(this_x, this_y, sub_x, sub_y);
         // Don't draw lines two times
