@@ -7,11 +7,11 @@ int multiplication_index = 20;
 ControlP5 cp5;
 float Attraction_value = 0.32; 
 float Damping_value = 0.59; 
+float Radius_value = 34; 
 Slider attraction_slider;
 Slider damping_slider;
 
 // Object - Bezier Rotation Points
-float radius = 100;
 int numPoints = 100;
 float angle = TWO_PI/(float)numPoints;
 
@@ -33,6 +33,13 @@ void setup(){
      .setRange(0,2)
      .setSize(200,50)
      .setValue(Damping_value)
+     ;
+     
+  cp5.addSlider("Radius_value")
+     .setPosition(10,200)
+     .setRange(0,200)
+     .setSize(200,50)
+     .setValue(Radius_value)
      ;
   
   // Add Objects
@@ -63,8 +70,8 @@ void draw(){
     Object current = objects.get(i);
     current.update();
     current.draw();
-    if(current.base_x || current.base_y){
-      current.remove();
+    if(current.base_x > (width + 20) || current.base_y > (height + 20)){
+      objects.remove(i);
       objects.add(new Object());
     }
   }
