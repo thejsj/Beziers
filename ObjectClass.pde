@@ -1,71 +1,87 @@
 class Object {
   ArrayList<SoftFloat> x;
   ArrayList<SoftFloat> y;
-  
+
   float this_x;
   float this_y;
   float sub_x;
   float sub_y;
-  
+
   float prev_x; 
   float prev_y; 
   float next_x; 
   float next_y;
+  
+  int base_x;
+  int base_y;
 
-  Object(){
+  IntList current_radius_position;
+
+  Object() {
     x = new ArrayList<SoftFloat>();
     y = new ArrayList<SoftFloat>();
+    current_radius_position = new IntList();
     
-    for(int i = 0; i < 5; i++){
-     x.add(new SoftFloat()); 
-     y.add(new SoftFloat());
-     x.get(i).set(random(width));
-     x.get(i).setTarget(random(width));
-     y.get(i).set(random(height));
-     y.get(i).setTarget(random(height));
+    base_x = int(random(width / 2)); 
+    base_y = int(random(height / 2));
+
+    for (int i = 0; i < 5; i++) {
+      int current_position = i * multiplication_index;
+      x.add(new SoftFloat()); 
+      y.add(new SoftFloat());
+      x.get(i).set(current_position);
+      x.get(i).setTarget(current_position);
+      y.get(i).set(current_position);
+      y.get(i).setTarget(current_position);
+      current_radius_position.append(int(random(0, numPoints)));
     }
   }
-  
-  void update(){
+
+  void update() {
     for (int ii =0; ii < x.size(); ii++) {
       SoftFloat current_x = x.get(ii); 
       SoftFloat current_y = y.get(ii);
 
-      if(Attraction_value != current_x.ATTRACTION){
+      if (Attraction_value != current_x.ATTRACTION) {
         current_x.ATTRACTION = Attraction_value;
         current_y.ATTRACTION = Attraction_value;
         println("new Attraction Value");
       }
-      if(Damping_value != current_x.DAMPING){
+      if (Damping_value != current_x.DAMPING) {
         current_x.DAMPING = Damping_value;
         current_y.DAMPING = Damping_value;
         println("new Damping Value");
       }
-      
-      if(!current_x.update()){
-        current_x.setTarget(random(width));
+
+      if (!current_x.update()) {
+        current_x.setTarget(ii * multiplication_index);
       }
-      if(!current_y.update()){
-        current_y.setTarget(random(height));
+      if (!current_y.update()) {
+        current_y.setTarget(ii * multiplication_index);
+      }
+      
+      current_radius_position.set(ii, current_radius_position.get(ii) + 1);
+      if (current_radius_position.get(ii) > numPoints) {
+        current_radius_position.set(ii, 0);
       }
     }
   }
-  
-  void draw(){
+
+  void draw() {
     for (int i =0; i < x.size(); i++) {
       for (int ii =0; ii < x.size(); ii++) {
         this_x = x.get(i).get();
         this_y = y.get(i).get();
         sub_x = x.get(ii).get();
         sub_y = y.get(ii).get();
-        if(i > 0 && i < x.size() - 1){
+        if (i > 0 && i < x.size() - 1) {
           prev_x = x.get(i - 1).get(); 
           prev_y = x.get(i - 1).get();
           next_x = x.get(i + 1).get(); 
           next_y = x.get(i + 1).get();
         }
         else {
-          if(i == 0){
+          if (i == 0) {
             prev_x = x.get(x.size() - 1).get(); 
             prev_y = x.get(x.size() - 1).get();
             next_x = x.get(i + 1).get(); 
@@ -78,19 +94,27 @@ class Object {
             next_y = x.get(0).get();
           }
         }
-        fill(i * 10, 100,100,10);
+        //fill(i * 10, 100, 100, 10);
         // Drawing triangle get the FrameRate from 45 to 5. That Sucks.
         //triangle(prev_x, prev_y, this_x, this_y, next_x, next_y); 
-        stroke(0, 0, 100, 5);
-        noFill();
+        stroke(0, 0, 100, 50);
+        //noFill();
+        line(this_x, this_y, sub_x, sub_y);
         // Don't draw lines two times
-        if(i > ii && i != ii){
-          bezier(this_x, this_y, sub_x, sub_y, prev_x, prev_y, next_x, next_y);
+        fill(0,0,100,10);
+        float x_1 = this_x + radius*cos(angle * current_radius_position.get(i));
+        float y_1 = this_y + radius*sin(angle * current_radius_position.get(i));
+        float x_2 = next_x + radius*cos(angle * current_radius_position.get(i));
+        float y_2 = next_y + radius*sin(angle * current_radius_position.get(i));
+        pushMatrix();
+        translate(base_x, base_y);
+        if (i > ii && i != ii) {
+          bezier(this_x, this_y, x_1, y_1, x_2, y_2, next_x, next_y);
         }
+        popMatrix();
       }
     }
   }
 }
-
 
 

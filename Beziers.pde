@@ -2,12 +2,18 @@ import controlP5.*;
 
 boolean firstTime = true;
 ArrayList<Object> objects;
+int multiplication_index = 20;
 
 ControlP5 cp5;
 float Attraction_value = 0.32; 
 float Damping_value = 0.59; 
 Slider attraction_slider;
 Slider damping_slider;
+
+// Object - Bezier Rotation Points
+float radius = 100;
+int numPoints = 100;
+float angle = TWO_PI/(float)numPoints;
 
 void setup(){
   colorMode(HSB, 100);
@@ -31,26 +37,9 @@ void setup(){
   
   // Add Objects
   objects = new ArrayList<Object>();  // Create an empty ArrayList
-  objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
+  for(int i = 0; i < 10; i++){
     objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-    objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-    objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-    objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
-  objects.add(new Object());
+  }
 }
 
 void draw(){
