@@ -12,8 +12,8 @@ class Object {
   float next_x; 
   float next_y;
   
-  int base_x;
-  int base_y;
+  SoftFloat base_x;
+  SoftFloat base_y;
   
   int hue;
 
@@ -24,12 +24,15 @@ class Object {
     y = new ArrayList<SoftFloat>();
     current_radius_position = new IntList();
     
-    base_x = int(random(-width)); 
-    base_y = int(random(-height));
+    base_x = new SoftFloat(); 
+    base_y = new SoftFloat(); 
+    base_x.set(int(random(-width))); 
+    base_y.set(int(random(-height))); 
+    base_x.setTarget(int(random(width, width *2)));
+    base_y.setTarget(int(random(height, height *2)));
     
     hue = int(random(100));
-    println("HUE: " + hue);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
       int current_position = i * multiplication_index;
       x.add(new SoftFloat()); 
       y.add(new SoftFloat());
@@ -69,13 +72,14 @@ class Object {
         current_radius_position.set(ii, 0);
       }
     }
-    base_x++;
-    base_y++;
+    base_x.update();
+    base_y.update();
   }
 
   void draw() {
     stroke(hue, 100, 100, 50);
-    fill(hue, 100,100,10);
+    fill(hue, 100,100,1);
+    //noFill();
     line(x.get(0).get(), y.get(0).get(), x.get(x.size()-1).get(), y.get(y.size()-1).get());
     for (int i =0; i < x.size(); i++) {
       for (int ii =0; ii < x.size(); ii++) {
@@ -115,8 +119,8 @@ class Object {
         float x_2 = next_x + Radius_value *cos(angle * current_radius_position.get(i));
         float y_2 = next_y + Radius_value *sin(angle * current_radius_position.get(i));
         pushMatrix();
-        translate(base_x, base_y);
-        if (i > ii && i != ii) {
+        translate(base_x.get(), base_y.get());
+        if (i > ii && i != ii && i != x.size() -1) {
           bezier(this_x, this_y, x_1, y_1, x_2, y_2, next_x, next_y);
         }
         popMatrix();

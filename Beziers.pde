@@ -5,9 +5,9 @@ ArrayList<Object> objects;
 int multiplication_index = 20;
 
 ControlP5 cp5;
-float Attraction_value = 0.32; 
-float Damping_value = 0.59; 
-float Radius_value = 34; 
+float Attraction_value = 0.04; 
+float Damping_value = 0.09; 
+float Radius_value = 14; 
 Slider attraction_slider;
 Slider damping_slider;
 
@@ -44,7 +44,7 @@ void setup(){
   
   // Add Objects
   objects = new ArrayList<Object>();  // Create an empty ArrayList
-  for(int i = 0; i < 15; i++){
+  for(int i = 0; i < 2; i++){
     objects.add(new Object());
   }
 }
@@ -70,7 +70,7 @@ void draw(){
     Object current = objects.get(i);
     current.update();
     current.draw();
-    if(current.base_x > (width + 20) || current.base_y > (height + 20)){
+    if(current.base_x.get() > (width + 20) || current.base_y.get() > (height + 20)){
       objects.remove(i);
       objects.add(new Object());
     }
@@ -78,8 +78,4 @@ void draw(){
   if(frameCount % 20 == 0){
    println(frameRate);  
   }
-}
-
-void slider() {
-  println("a slider event. setting background to ");
 }
